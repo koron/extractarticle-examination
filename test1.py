@@ -10,7 +10,7 @@ def getPlain(url):
     resp = requests.get(url)
     doc = Document(resp.text)
     el = html.fromstring(doc.summary())
-    return el.text_content().translate(str.maketrans('', '', '\n\r\t'))
+    return el.text_content().translate(str.maketrans('', '', '\n\r\t')).strip()
 
 if __name__ == "__main__":
     import sys
