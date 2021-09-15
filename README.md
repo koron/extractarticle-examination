@@ -8,6 +8,8 @@ readability-xml (<https://pypi.org/project/readability-lxml/>) を使ったシ�
 
 ```console
 $ python test1.py {URLs...}
+
+$ python test1.py < url_list.txt
 ```
 
 サンプルはこう。実際は `...(snip)` 以降にも本文が続く

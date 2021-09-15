@@ -14,8 +14,18 @@ def getPlain(url):
 
 if __name__ == "__main__":
     import sys
-    for url in sys.argv[1:]:
-        try:
-            print("OK\t%s\t%s" % (url, getPlain(url)))
-        except Exception as e:
-            print("NG\t%s\t%s" % (url, e))
+    import fileinput
+    args = sys.argv[1:]
+    if len(args) > 0:
+        for url in sys.argv[1:]:
+            try:
+                print("OK\t%s\t%s" % (url, getPlain(url)))
+            except Exception as e:
+                print("NG\t%s\t%s" % (url, e))
+    else:
+        for line in fileinput.input():
+            url = line.rstrip()
+            try:
+                print("OK\t%s\t%s" % (url, getPlain(url)))
+            except Exception as e:
+                print("NG\t%s\t%s" % (url, e))
