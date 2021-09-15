@@ -31,7 +31,7 @@ OK      https://nazology.net/archives/95980     刺し身好きにとって...(s
 
 URL | 成否 | 分類 | 備考
 ----|:----:|------|------
-https://news.yahoo.co.jp/articles/acba39a56e3a15a628b2c6e7c288f103222ce86c | GOOD | Yahooニュースの1記事 | (n/a)
+https://news.yahoo.co.jp/articles/acba39a56e3a15a628b2c6e7c288f103222ce86c | BAD | Yahooニュースの1記事 | 最初は大丈夫だったが、のちにダメになった
 https://news.yahoo.co.jp/pickup/6404492 | BAD | 上記のYahooニュースのピックアップ | アクセスランキングのタイトルが採用される。ピックアップは本文が短いから?
 https://www.asahi.com/articles/ASP9G5DG1P9GUTIL011.html | GOOD | 朝日新聞の記事 | (n/a)
 https://www.asahi.com/articles/ASP9G66HWP9GUCLV00D.html | GOOD | 朝日新聞の記事 | (n/a)
