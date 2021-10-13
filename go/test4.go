@@ -12,6 +12,7 @@ import (
 
 	readability "github.com/go-shiori/go-readability"
 	"github.com/koron-go/janorm"
+	"github.com/koron-go/ngram"
 )
 
 func extractArticle(name string) (readability.Article, error) {
@@ -46,6 +47,15 @@ func regulateText(s string) string {
 	return janorm.Normalize(s)
 }
 
+func calcFrac(base, target ngram.Index) float64 {
+	cnt := 0
+	for k := range base {
+		if _, ok := target[k]; ok {
+			cnt++
+		}
+	}
+	return float64(cnt) / float64(len(base))
+}
 func fetchPlain(next func() string) {
 	for {
 		u := next()
@@ -57,7 +67,12 @@ func fetchPlain(next func() string) {
 			fmt.Printf("NG\t%s\t%s\n", u, err)
 			continue
 		}
-		fmt.Printf("OK\t%s\t%s\t%s\n", u, regulateText(a.Title), regulateText(a.TextContent))
+		title := regulateText(a.Title)
+		tIndex := ngram.New(2, title)
+		content := regulateText(a.TextContent)
+		cIndex := ngram.New(2, content)
+		frac := calcFrac(tIndex, cIndex)
+		fmt.Printf("OK\t%s\t%f\t%s\t%s\n", u, frac, title, content)
 	}
 }
 

@@ -5,6 +5,7 @@ go 1.17
 require (
 	github.com/go-shiori/go-readability v0.0.0-20210627123243-82cc33435520
 	github.com/koron-go/janorm v0.0.0-20210920234330-099a86886adb
+	github.com/koron-go/ngram v0.0.1
 )
 
 require (
