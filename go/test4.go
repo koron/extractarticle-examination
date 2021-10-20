@@ -69,10 +69,13 @@ func fetchPlain(next func() string) {
 		}
 		title := regulateText(a.Title)
 		tIndex := ngram.New(2, title)
+		excerpt := regulateText(a.Excerpt)
+		eIndex := ngram.New(2, excerpt)
 		content := regulateText(a.TextContent)
 		cIndex := ngram.New(2, content)
-		frac := calcFrac(tIndex, cIndex)
-		fmt.Printf("OK\t%s\t%f\t%s\t%s\n", u, frac, title, content)
+		frac1 := calcFrac(tIndex, cIndex)
+		frac2 := calcFrac(eIndex, cIndex)
+		fmt.Printf("OK\t%s\t%f\t%f\t%s\t%s\t%s\n", u, frac1, frac2, title, excerpt, content)
 	}
 }
 
