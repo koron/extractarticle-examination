@@ -10,18 +10,57 @@ import (
 	"os"
 	"strings"
 
+	"github.com/go-shiori/dom"
 	readability "github.com/go-shiori/go-readability"
 	"github.com/koron-go/janorm"
 	"github.com/koron-go/ngram"
+	"golang.org/x/net/html"
 )
 
-func extractArticle(name string) (readability.Article, error) {
+type Article struct {
+	readability.Article
+
+	HeadTitle string
+	MetaDesc  string
+}
+
+func readFileAsDOM(name string) (*html.Node, error) {
 	f, err := os.Open(name)
 	if err != nil {
-		return readability.Article{}, err
+		return nil, err
 	}
 	defer f.Close()
-	return readability.FromReader(f, nil)
+	return dom.Parse(f)
+}
+
+func extractHeadTitle(doc *html.Node) string {
+	for _, n := range dom.GetElementsByTagName(doc, "title") {
+		return dom.TextContent(n)
+	}
+	return ""
+}
+
+func extractMetaDesc(doc *html.Node) string {
+	for _, n := range dom.QuerySelectorAll(doc, `meta[name='description']`) {
+		return dom.GetAttribute(n, "content")
+	}
+	return ""
+}
+
+func extractArticle(name string) (*Article, error) {
+	doc, err := readFileAsDOM(name)
+	p := readability.NewParser()
+	a, err := p.ParseDocument(doc, nil)
+	if err != nil {
+		return nil, err
+	}
+	title := extractHeadTitle(doc)
+	desc := extractMetaDesc(doc)
+	return &Article{
+		Article:   a,
+		HeadTitle: title,
+		MetaDesc:  desc,
+	}, nil
 }
 
 func regulateText(s string) string {
@@ -56,7 +95,37 @@ func calcFrac(base, target ngram.Index) float64 {
 	}
 	return float64(cnt) / float64(len(base))
 }
+
+func trendLabel(base, target float64) string {
+	if target > base {
+		return "↗"
+	}
+	if target < base {
+		return "↘"
+	}
+	return "→"
+}
 func fetchPlain(next func() string) {
+	for i, s := range []string{
+		"R",                   // 1
+		"Filepath",            // 2
+		"F(Title)",            // 3
+		"F(head>title)",       // 4
+		"F(Excerpt)",          // 5
+		"F(meta/description)", // 6
+		"Title",               // 7
+		"Excerpt",             // 8
+		"head>title",          // 9
+		"meta/description",    // 10
+		"Body",                // 11
+	} {
+		if i != 0 {
+			fmt.Printf("\t")
+		}
+		fmt.Printf("%d:%s", i+1, s)
+	}
+	fmt.Println("")
+
 	for {
 		u := next()
 		if u == "" {
@@ -71,11 +140,33 @@ func fetchPlain(next func() string) {
 		tIndex := ngram.New(2, title)
 		excerpt := regulateText(a.Excerpt)
 		eIndex := ngram.New(2, excerpt)
+		headTitle := regulateText(a.HeadTitle)
+		htIndex := ngram.New(2, headTitle)
+		metaDesc := regulateText(a.MetaDesc)
+		mdIndex := ngram.New(2, metaDesc)
 		content := regulateText(a.TextContent)
 		cIndex := ngram.New(2, content)
+
 		frac1 := calcFrac(tIndex, cIndex)
 		frac2 := calcFrac(eIndex, cIndex)
-		fmt.Printf("OK\t%s\t%f\t%f\t%s\t%s\t%s\n", u, frac1, frac2, title, excerpt, content)
+		frac3 := calcFrac(htIndex, cIndex)
+		frac4 := calcFrac(mdIndex, cIndex)
+
+		trend3 := trendLabel(frac1, frac3)
+		trend4 := trendLabel(frac2, frac4)
+
+		fmt.Printf("OK\t%s\t%f\t%f%s\t%f\t%f%s\t%s\t%s\t%s\t%s\t%s\n",
+			u,             // 2
+			frac1,         // 3
+			frac3, trend3, // 4
+			frac2,         // 5
+			frac4, trend4, // 6
+			title,     // 7
+			excerpt,   // 8
+			headTitle, // 9
+			metaDesc,  // 10
+			content,   // 11
+		)
 	}
 }
 
