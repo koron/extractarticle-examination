@@ -16,7 +16,7 @@ dependencies {
 }
 
 application {
-    mainClass = 'net.kaoriya.extractarticle.App'
+    mainClass = 'net.kaoriya.extractarticle.App2'
 }
 
 tasks.named('test') {
