@@ -125,3 +125,21 @@ https://nazology.net/archives/95980 | GOOD | ナゾロジーの記事 | (n/a)
 <https://github.com/pvdlg/boilerpipe/blob/master/src/main/java/de/l3s/boilerpipe/extractors/ArticleExtractor.java>
 
 複数のフィルタを組み合わせる形になっている。
+
+## go/test4
+
+MozillaのReadabilityJSの移植を評価
+
+descriptionがcontentから切り出されてることを期待して、
+切り出し結果を評価するのが良いとの知見が得られた。
+
+## test5
+
+ReadabilityJS と Boilerpipe の比較評価
+本文抽出はJavaでそれ以降の評価はGoで行った。
+
+(test5) 若干の差異はあるもののおおむねBoilerpipeはReadabilityJS(Go版)と同程度の
+性能だった。
+
+(test5b) Java版のReadabilityJSはGo版とほぼ同じ振る舞いだった。
+評価点の極めて微小な違いはあったが、傾向は完全に一致した。

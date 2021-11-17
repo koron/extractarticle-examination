@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"errors"
+	"flag"
 	"fmt"
 	"io"
 	"log"
@@ -119,8 +120,12 @@ func check(e entry) error {
 	return nil
 }
 
+var input string
+
 func main() {
-	entries, err := loadArticles("../java/test5_java_out.txt")
+	flag.StringVar(&input, "input", "../java/test5_java_out.txt", "")
+	flag.Parse()
+	entries, err := loadArticles(input)
 	if err != nil {
 		log.Fatalf("failed to load article: %s", err)
 	}

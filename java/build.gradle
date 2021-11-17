@@ -13,10 +13,11 @@ dependencies {
     implementation 'com.google.guava:guava:29.0-jre'
 
     implementation 'com.syncthemall:boilerpipe:1.2.2'
+    implementation 'net.dankito.readability4j:readability4j:1.0.8'
 }
 
 application {
-    mainClass = 'net.kaoriya.extractarticle.App2'
+    mainClass = 'net.kaoriya.extractarticle.App3'
 }
 
 tasks.named('test') {
