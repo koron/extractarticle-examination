@@ -38,14 +38,12 @@ public class ArticleExtractor {
                 case '\r':
                     prev = false;
                     continue;
-
                 case ' ':
                     if (prev) {
                         continue;
                     }
                     prev = true;
                     break;
-
                 default:
                     prev = false;
                     break;
